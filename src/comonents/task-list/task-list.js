@@ -4,28 +4,28 @@ import Task from '../task';
 
 import './task-list.css';
 
-function TaskList({ todos }) {
+function TaskList({ todos, onCompleted, onDeleted }) {
   const elements = todos.map((item) => {
-    const { id, state, ...rest } = item;
-    if (state === 'active') {
+    const { id, taskState, ...rest } = item;
+    if (taskState === 'active') {
       return (
         <li key={id}>
-          <Task {...rest} />
+          <Task {...rest} onCompleted={() => onCompleted(id)} onDeleted={() => onDeleted(id)} />
         </li>
       );
     }
 
-    if (state === 'editing') {
+    if (taskState === 'editing') {
       return (
-        <li key={id} className={state}>
+        <li key={id} className={taskState}>
           <Task {...rest} />
           <input type="text" className="edit" value="Editing task" />
         </li>
       );
     }
     return (
-      <li key={id} className={state}>
-        <Task {...rest} />
+      <li key={id} className={taskState}>
+        <Task {...rest} onCompleted={() => onCompleted(id)} onDeleted={() => onDeleted(id)} />
       </li>
     );
   });
