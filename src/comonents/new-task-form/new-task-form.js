@@ -2,8 +2,33 @@ import React from 'react';
 
 import './new-task-form.css';
 
-function NewTaskForm() {
-  return <input className="new-todo" placeholder="What needs to be done?" autoFocus />;
-}
+export default class NewTaskForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: '',
+    };
+  }
 
-export default NewTaskForm;
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.props.onAdd(this.state.input);
+    this.setState({
+      input: ''
+    })
+  };
+
+  onChange = (e) => {
+    this.setState({
+      input: e.target.value,
+    });
+  };
+
+  render() {
+    return (
+      <form className="new-todo-form" onSubmit={this.onSubmit}>
+        <input className="new-todo" value={this.state.input}placeholder="What needs to be done?" autoFocus onChange={this.onChange} />
+      </form>
+    );
+  }
+}
