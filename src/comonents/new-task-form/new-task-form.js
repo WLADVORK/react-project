@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './new-task-form.css';
 
@@ -14,8 +15,8 @@ export default class NewTaskForm extends React.Component {
     e.preventDefault();
     this.props.onAdd(this.state.input);
     this.setState({
-      input: ''
-    })
+      input: '',
+    });
   };
 
   onChange = (e) => {
@@ -27,8 +28,16 @@ export default class NewTaskForm extends React.Component {
   render() {
     return (
       <form className="new-todo-form" onSubmit={this.onSubmit}>
-        <input className="new-todo" value={this.state.input}placeholder="What needs to be done?" autoFocus onChange={this.onChange} />
+        <input className="new-todo" value={this.state.input} placeholder="What needs to be done?" autoFocus onChange={this.onChange} />
       </form>
     );
   }
 }
+
+NewTaskForm.defaultProps = {
+  onAdd: () => {},
+};
+
+NewTaskForm.propTypes = {
+  onAdd: PropTypes.func,
+};

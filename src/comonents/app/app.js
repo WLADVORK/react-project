@@ -19,7 +19,6 @@ export default class App extends React.Component {
     return {
       description,
       taskState: 'active',
-      created: 'agoago',
       id: this.maxId++,
     };
   }
