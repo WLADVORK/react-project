@@ -2,17 +2,17 @@ import React from 'react';
 
 import './tasks-filter.css';
 
-function TasksFilter() {
+function TasksFilter({ onFiltered }) {
   return (
     <ul className="filters">
       <li>
-        <button className="selected">All</button>
+        <button className="selected" onClick={() => onFiltered('all')}>All</button>
       </li>
       <li>
-        <button>Active</button>
+        <button onClick={() => onFiltered('active')}>Active</button>
       </li>
       <li>
-        <button>Completed</button>
+        <button onClick={() => onFiltered('completed')}>Completed</button>
       </li>
     </ul>
   );

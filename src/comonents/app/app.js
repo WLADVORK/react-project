@@ -5,68 +5,93 @@ import NewTaskForm from '../new-task-form';
 import Footer from '../footer';
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todoData: [
-        this.createTask('lol'), this.createTask('kek'), this.createTask('super'),
-      ],
-    };
-    this.maxId = 1;
-    this.copy = this.state.todoData;
-  }
+  maxId = 1;
 
-  addTask = (text) => {
-    const newItem = this.createTask(text);
-    this.setState(({ todoData }) => ({
-      todoData: [...todoData, newItem],
-    }));
-    this.copy = this.state.todoData;
+  state = {
+    todoData: [
+      this.createTask('Написать кривой код'),
+    ],
   };
 
-  taskComplete = (id) => {
-    this.setState(({ todoData }) => {
-      const inx = todoData.findIndex((el) => el.id === id);
-      const arr = [...todoData];
-      arr[inx].taskState = (arr[inx].taskState === 'completed') ? 'active' : 'completed';
-      return {
-        todoData: arr,
-      };
-    });
-    this.copy = this.state.todoData;
-  };
-
-  taskDeleted = (id) => {
-    this.setState(({ todoData }) => {
-      const inx = todoData.findIndex((el) => el.id === id);
-      return {
-        todoData: [...todoData.slice(0, inx), ...todoData.slice(inx + 1)],
-      };
-    });
-    this.copy = this.state.todoData; 
-  };
+  copy = JSON.stringify(this.state.todoData);
 
   createTask(description) {
-    return ({
+    return {
       description,
       taskState: 'active',
       created: 'agoago',
       id: this.maxId++,
-    });
+    };
   }
 
-  filterTasks = (buttonType) => {
-    this.setState(({todoData}) => {
-      let filtered = todoData;
-
+  addTask = (text) => {
+    const newItem = this.createTask(text);
+    this.setState(() => {
+      this.copy = JSON.stringify([...JSON.parse(this.copy), newItem]);
       return {
-        todoData: filtered,
+        todoData: JSON.parse(this.copy),
+      };
+    });
+  };
+
+  taskComplete = (id) => {
+    this.setState(() => {
+      const copy = JSON.parse(this.copy);
+      const inx = copy.findIndex((el) => el.id === id);
+      const arr = [...copy];
+      arr[inx].taskState = arr[inx].taskState === 'completed' ? 'active' : 'completed';
+      this.copy = JSON.stringify(arr);
+      return {
+        todoData: JSON.parse(this.copy),
+      };
+    });
+  };
+
+  taskDeleted = (id) => {
+    this.setState(() => {
+      const copy = JSON.parse(this.copy);
+      const inx = copy.findIndex((el) => el.id === id);
+      this.copy = JSON.stringify([
+        ...copy.slice(0, inx),
+        ...copy.slice(inx + 1),
+      ]);
+      return {
+        todoData: JSON.parse(this.copy),
+      };
+    });
+  };
+
+  taskFilter = (buttonType) => {
+    this.setState(() => {
+      const realCopy = JSON.parse(this.copy);
+      let result = realCopy;
+      if (buttonType === 'completed') {
+        result = realCopy.filter((item) => item.taskState === 'completed');
       }
-    }) 
-  }
+      if (buttonType === 'active') {
+        result = realCopy.filter((item) => item.taskState === 'active');
+      }
+      return {
+        todoData: result,
+      };
+    });
+  };
+
+  clearCompleted = () => {
+    this.setState(() => {
+      const copy = JSON.parse(this.copy);
+      const result = copy.filter((item) => item.taskState !== 'completed');
+      this.copy = JSON.stringify(result);
+      return {
+        todoData: result,
+      };
+    });
+  };
 
   render() {
-    const todoLength = this.state.todoData.length;
+    const todoLength = JSON.parse(this.copy).filter(
+      (item) => item.taskState !== 'completed',
+    ).length;
 
     return (
       <section className="todoapp">
@@ -75,8 +100,12 @@ export default class App extends React.Component {
           <NewTaskForm onAdd={(text) => this.addTask(text)} />
         </header>
         <section className="main">
-          <TaskList todos={this.state.todoData} onCompleted={(id) => this.taskComplete(id)} onDeleted={(id) => this.taskDeleted(id)} />
-          <Footer length={todoLength} />
+          <TaskList
+            todos={this.state.todoData}
+            onCompleted={(id) => this.taskComplete(id)}
+            onDeleted={(id) => this.taskDeleted(id)}
+          />
+          <Footer length={todoLength} onFiltered={this.taskFilter} onCleared={this.clearCompleted} />
         </section>
       </section>
     );
