@@ -1,30 +1,36 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import './tasks-filter.css';
+import './tasks-filter.css'
 
-function TasksFilter({ onFiltered }) {
+function TasksFilter({ Filtered }) {
   return (
     <ul className="filters">
       <li>
-        <button className="selected" onClick={() => onFiltered('all')}>All</button>
+        <button type="button" className="selected" onClick={() => Filtered('all')}>
+          All
+        </button>
       </li>
       <li>
-        <button onClick={() => onFiltered('active')}>Active</button>
+        <button type="button" onClick={() => Filtered('active')}>
+          Active
+        </button>
       </li>
       <li>
-        <button onClick={() => onFiltered('completed')}>Completed</button>
+        <button type="button" onClick={() => Filtered('completed')}>
+          Completed
+        </button>
       </li>
     </ul>
-  );
+  )
 }
 
 TasksFilter.defaultProps = {
-  onFiltered: () => {},
-};
+  Filtered: () => {},
+}
 
 TasksFilter.propTypes = {
-  onFiltered: PropTypes.func,
-};
+  Filtered: PropTypes.func,
+}
 
-export default TasksFilter;
+export default TasksFilter
