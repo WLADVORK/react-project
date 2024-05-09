@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react'
@@ -12,12 +13,14 @@ export default class Task extends React.Component {
     super(props)
     this.state = {
       time: formatDistanceToNow(this.timeCreated, { includeSeconds: true }),
+      taskState: props.taskState,
+      checked: props.taskState !== 'active',
     }
   }
 
   render() {
     const { onCompleted, description, onDeleted } = this.props
-    const { time } = this.state
+    const { time, checked } = this.state
     setInterval(() => {
       this.setState({
         time: formatDistanceToNow(this.timeCreated, { includeSeconds: true }),
@@ -25,7 +28,30 @@ export default class Task extends React.Component {
     }, 5000)
     return (
       <div className="view">
-        <input className="toggle" type="checkbox" onChange={onCompleted} />
+        <input
+          className="toggle"
+          type="checkbox"
+          onChange={() => {
+            onCompleted()
+            this.setState(({ taskState }) => {
+              let obj
+              if (taskState === 'active') {
+                obj = {
+                  checked: true,
+                  taskState: 'completed',
+                }
+              }
+              if (taskState === 'completed') {
+                obj = {
+                  checked: false,
+                  taskState: 'active',
+                }
+              }
+              return obj
+            })
+          }}
+          checked={checked}
+        />
         <label>
           <span className="description">{description}</span>
           <span className="created">{time}</span>

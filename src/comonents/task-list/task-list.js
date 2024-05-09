@@ -12,7 +12,12 @@ function TaskList({ todos, onCompleted, onDeleted }) {
       return (
         <li key={id}>
           {/* eslint-disable-next-line max-len */}
-          <Task description={description} onCompleted={() => onCompleted(id)} onDeleted={() => onDeleted(id)} />
+          <Task
+            description={description}
+            onCompleted={() => onCompleted(id)}
+            onDeleted={() => onDeleted(id)}
+            taskState={taskState}
+          />
         </li>
       )
     }
@@ -28,7 +33,12 @@ function TaskList({ todos, onCompleted, onDeleted }) {
     return (
       <li key={id} className={taskState}>
         {/* eslint-disable-next-line max-len */}
-        <Task description={description} onCompleted={() => onCompleted(id)} onDeleted={() => onDeleted(id)} />
+        <Task
+          description={description}
+          onCompleted={() => onCompleted(id)}
+          onDeleted={() => onDeleted(id)}
+          taskState={taskState}
+        />
       </li>
     )
   })
