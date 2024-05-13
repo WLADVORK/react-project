@@ -5,7 +5,7 @@ import TasksFilter from '../tasks-filter'
 
 import './footer.css'
 
-function Footer({ length, Filtered, Cleared }) {
+function Footer({ length, setFilter, Cleared }) {
   const lengthSpace = `${length} `
   return (
     <footer className="footer">
@@ -13,7 +13,7 @@ function Footer({ length, Filtered, Cleared }) {
         {lengthSpace}
         items left
       </span>
-      <TasksFilter Filtered={Filtered} />
+      <TasksFilter setFilter={setFilter} />
       <button type="button" className="clear-completed" onClick={() => Cleared()}>
         Clear completed
       </button>
@@ -23,13 +23,13 @@ function Footer({ length, Filtered, Cleared }) {
 
 Footer.defaultProps = {
   length: 0,
-  Filtered: () => {},
+  setFilter: () => {},
   Cleared: () => {},
 }
 
 Footer.propTypes = {
   length: PropTypes.number,
-  Filtered: PropTypes.func,
+  setFilter: PropTypes.func,
   Cleared: PropTypes.func,
 }
 

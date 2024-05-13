@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react'
 
 import './app.css'
@@ -12,66 +13,79 @@ export default class App extends React.Component {
     super(props)
     this.state = {
       todoData: [this.createTask('Написать кривой код')],
+      // eslint-disable-next-line react/no-unused-state
+      filter: 'all',
     }
-    const { todoData } = this.state
-    this.copy = JSON.stringify(todoData)
   }
 
   addTask = (text) => {
     const newItem = this.createTask(text)
-    this.setState(() => {
-      this.copy = JSON.stringify([...JSON.parse(this.copy), newItem])
-      return {
-        todoData: JSON.parse(this.copy),
-      }
-    })
+    this.setState(({ todoData }) => ({
+      todoData: [...todoData, newItem],
+    }))
   }
 
   taskComplete = (id) => {
-    this.setState(() => {
-      const copy = JSON.parse(this.copy)
-      const inx = copy.findIndex((el) => el.id === id)
-      const arr = [...copy]
+    this.setState(({ todoData }) => {
+      const inx = todoData.findIndex((el) => el.id === id)
+      const arr = [...todoData]
       arr[inx].taskState = arr[inx].taskState === 'completed' ? 'active' : 'completed'
-      this.copy = JSON.stringify(arr)
       return {
-        todoData: JSON.parse(this.copy),
+        todoData: arr,
       }
     })
   }
 
   taskDeleted = (id) => {
-    this.setState(() => {
-      const copy = JSON.parse(this.copy)
-      const inx = copy.findIndex((el) => el.id === id)
-      this.copy = JSON.stringify([...copy.slice(0, inx), ...copy.slice(inx + 1)])
+    this.setState(({ todoData }) => {
+      const inx = todoData.findIndex((el) => el.id === id)
       return {
-        todoData: JSON.parse(this.copy),
+        todoData: [...todoData.slice(0, inx), ...todoData.slice(inx + 1)],
       }
     })
   }
 
-  taskFilter = (buttonType) => {
-    this.setState(() => {
-      const realCopy = JSON.parse(this.copy)
-      let result = realCopy
-      if (buttonType === 'completed') {
-        result = realCopy.filter((item) => item.taskState === 'completed')
-      }
-      if (buttonType === 'active') {
-        result = realCopy.filter((item) => item.taskState === 'active')
-      }
-      return {
-        todoData: result,
-      }
-    })
+  taskFilter = () => {
+    const { filter, todoData } = this.state
+    switch (filter) {
+      case 'all':
+        return todoData
+      case 'active':
+        return todoData.filter((item) => item.taskState === 'active')
+      case 'completed':
+        return todoData.filter((item) => item.taskState === 'completed')
+      default:
+        return todoData
+    }
+  }
+
+  setFilter = (buttonType) => {
+    switch (buttonType) {
+      case 'all':
+        this.setState({
+          filter: 'all',
+        })
+        break
+      case 'active':
+        this.setState({
+          filter: 'active',
+        })
+        break
+      case 'completed':
+        this.setState({
+          filter: 'completed',
+        })
+        break
+      default:
+        this.setState({
+          filter: 'all',
+        })
+    }
   }
 
   clearCompleted = () => {
-    this.setState(() => {
-      const copy = JSON.parse(this.copy)
-      const result = copy.filter((item) => item.taskState !== 'completed')
-      this.copy = JSON.stringify(result)
+    this.setState(({ todoData }) => {
+      const result = todoData.filter((item) => item.taskState !== 'completed')
       return {
         todoData: result,
       }
@@ -89,8 +103,9 @@ export default class App extends React.Component {
   }
 
   render() {
-    const todoLength = JSON.parse(this.copy).filter((item) => item.taskState !== 'completed').length
     const { todoData } = this.state
+    const todoLength = todoData.filter((item) => item.taskState !== 'completed').length
+    const todoDataFiltered = this.taskFilter()
     return (
       <section className="todoapp">
         <header className="header">
@@ -99,11 +114,11 @@ export default class App extends React.Component {
         </header>
         <section className="main">
           <TaskList
-            todos={todoData}
+            todos={todoDataFiltered}
             onCompleted={(id) => this.taskComplete(id)}
             onDeleted={(id) => this.taskDeleted(id)}
           />
-          <Footer length={todoLength} Filtered={this.taskFilter} Cleared={this.clearCompleted} />
+          <Footer length={todoLength} setFilter={this.setFilter} Cleared={this.clearCompleted} />
         </section>
       </section>
     )

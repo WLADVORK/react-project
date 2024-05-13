@@ -12,7 +12,7 @@ class TasksFilter extends React.Component {
   }
 
   render() {
-    const { Filtered } = this.props
+    const { setFilter } = this.props
     const { checked } = this.state
 
     let all = ''
@@ -33,7 +33,7 @@ class TasksFilter extends React.Component {
             type="button"
             className={all}
             onClick={() => {
-              Filtered('all')
+              setFilter('all')
               this.setState({
                 checked: 'all',
               })
@@ -47,7 +47,7 @@ class TasksFilter extends React.Component {
             className={active}
             type="button"
             onClick={() => {
-              Filtered('active')
+              setFilter('active')
               this.setState({
                 checked: 'active',
               })
@@ -61,7 +61,7 @@ class TasksFilter extends React.Component {
             type="button"
             className={completed}
             onClick={() => {
-              Filtered('completed')
+              setFilter('completed')
               this.setState({
                 checked: 'completed',
               })
@@ -76,11 +76,11 @@ class TasksFilter extends React.Component {
 }
 
 TasksFilter.defaultProps = {
-  Filtered: () => {},
+  setFilter: () => {},
 }
 
 TasksFilter.propTypes = {
-  Filtered: PropTypes.func,
+  setFilter: PropTypes.func,
 }
 
 export default TasksFilter
