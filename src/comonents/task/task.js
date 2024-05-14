@@ -4,34 +4,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './task.css'
-import { formatDistanceToNow } from 'date-fns'
 
 export default class Task extends React.Component {
-  timeCreated = new Date()
-
   constructor(props) {
     super(props)
     this.state = {
-      time: formatDistanceToNow(this.timeCreated, { includeSeconds: true }),
       taskState: props.taskState,
       checked: props.taskState !== 'active',
     }
   }
 
+  componentDidMount() {
+    const { changeCreatedTime } = this.props
+    changeCreatedTime()
+  }
+
   render() {
-    const { onCompleted, description, onDeleted } = this.props
-    const { time, checked } = this.state
-    setInterval(() => {
-      this.setState({
-        time: formatDistanceToNow(this.timeCreated, { includeSeconds: true }),
-      })
-    }, 5000)
+    const { onCompleted, onDeleted, stopTimer, startTimer, stopCreatedTimeTimer } = this.props
+    const { description, timeCreatedFormat, min, sec } = this.props
+    const { checked } = this.state
+
     return (
       <div className="view">
         <input
           className="toggle"
           type="checkbox"
           onChange={() => {
+            stopTimer()
             onCompleted()
             this.setState(({ taskState }) => {
               let obj
@@ -53,11 +52,25 @@ export default class Task extends React.Component {
           checked={checked}
         />
         <label>
-          <span className="description">{description}</span>
-          <span className="created">{time}</span>
+          <span className="title">{description}</span>
+          <span className="description">
+            <button type="button" />
+            <button type="button" className="icon icon-play" onClick={startTimer} />
+            <button type="button" className="icon icon-pause" onClick={stopTimer} />
+            <span className="description__time">{`${min}:${sec}`}</span>
+          </span>
+          <span className="description">{timeCreatedFormat}</span>
         </label>
         <button type="button" className="icon icon-edit" />
-        <button type="button" className="icon icon-destroy" onClick={onDeleted} />
+        <button
+          type="button"
+          className="icon icon-destroy"
+          onClick={() => {
+            stopTimer()
+            stopCreatedTimeTimer()
+            onDeleted()
+          }}
+        />
       </div>
     )
   }

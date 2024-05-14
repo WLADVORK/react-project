@@ -29,3 +29,7 @@
 .toggle-all:checked + label:before {
   color: #737373;
 }
+
+.description__time {
+  margin-left: 10px;
+}
