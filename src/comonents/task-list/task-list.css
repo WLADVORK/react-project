@@ -88,10 +88,10 @@
 }
 
 .todo-list li .view {
-	position: relative;
+  position: relative;
 }
 
-.todo-list li label .description  {
+.todo-list li label .description {
   font-size: 13px;
   color: gray;
 }
@@ -126,8 +126,8 @@
 
 .todo-list li .icon-destroy {
   position: absolute;
-	top: 0;
-	bottom: -3px;
+  top: 0;
+  bottom: -3px;
   right: 10px;
 }
 
@@ -137,8 +137,8 @@
 
 .todo-list li .icon-edit {
   position: absolute;
-	top: 0;
-	bottom: -3px;
+  top: 0;
+  bottom: -3px;
   font-size: 19px;
   right: 45px;
 }
@@ -149,18 +149,18 @@
 
 .todo-list li .icon-pause,
 .todo-list li .icon-play {
-	font-size: 18px;
-	width: 18px;
-	height: 18px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 .todo-list li .icon-play {
-	font-size: 15px;
+  font-size: 15px;
 }
 .icon-pause:after {
-	content: '⏸';
+  content: '⏸';
 }
 .icon-play:after {
-	content: '▶';
+  content: '▶';
 }
 
 .todo-list li .edit {

@@ -1,13 +1,20 @@
 /* eslint-disable max-len */
 /* eslint-disable object-curly-newline */
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import Task from '../task'
 
 import './task-list.css'
 
-function TaskList({ todos, onCompleted, onDeleted, changeCreatedTime, startTimer, stopTimer, stopCreatedTimeTimer }) {
+export default function TaskList({
+  todos,
+  onCompleted,
+  onDeleted,
+  changeCreatedTime,
+  startTimer,
+  stopTimer,
+  stopCreatedTimeTimer,
+}) {
   const elements = todos.map((item) => {
     const { id, taskState, description, min, sec, timeCreatedFormat } = item
     if (taskState === 'active') {
@@ -58,23 +65,3 @@ function TaskList({ todos, onCompleted, onDeleted, changeCreatedTime, startTimer
 
   return <ul className="todo-list">{elements}</ul>
 }
-
-TaskList.defaultProps = {
-  todos: [
-    {
-      description: 'error',
-      taskState: 'active',
-      id: 0,
-    },
-  ],
-  onCompleted: () => {},
-  onDeleted: () => {},
-}
-
-TaskList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object),
-  onCompleted: PropTypes.func,
-  onDeleted: PropTypes.func,
-}
-
-export default TaskList

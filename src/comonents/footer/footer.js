@@ -1,11 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import TasksFilter from '../tasks-filter'
 
 import './footer.css'
 
-function Footer({ length, setFilter, Cleared }) {
+export default function Footer({ length, setFilter, Cleared }) {
   const lengthSpace = `${length} `
   return (
     <footer className="footer">
@@ -20,17 +19,3 @@ function Footer({ length, setFilter, Cleared }) {
     </footer>
   )
 }
-
-Footer.defaultProps = {
-  length: 0,
-  setFilter: () => {},
-  Cleared: () => {},
-}
-
-Footer.propTypes = {
-  length: PropTypes.number,
-  setFilter: PropTypes.func,
-  Cleared: PropTypes.func,
-}
-
-export default Footer
